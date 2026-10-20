@@ -1,0 +1,4 @@
+google-genai
+rich
+python-dotenv
+pydantic

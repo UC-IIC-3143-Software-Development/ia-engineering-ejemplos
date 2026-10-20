@@ -1,0 +1,6 @@
+venv/
+__pycache__
+*.pyc
+
+# Posts completos que escribe main.py en cada corrida
+respuestas/

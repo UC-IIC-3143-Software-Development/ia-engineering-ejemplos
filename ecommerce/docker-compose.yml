@@ -1,0 +1,78 @@
+services:
+  db-primary:
+    image: postgres:16
+    command: postgres -c wal_level=replica -c max_wal_senders=10 -c max_replication_slots=10
+    environment:
+      POSTGRES_USER: shop
+      POSTGRES_PASSWORD: shop
+      POSTGRES_DB: shop
+      # md5 en vez de scram para que PgBouncer y la réplica autentiquen sin fricción
+      POSTGRES_HOST_AUTH_METHOD: md5
+      POSTGRES_INITDB_ARGS: --auth-host=md5
+    ports: ["5432:5432"]
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+      - primary-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U shop -d shop"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  db-replica:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: shop
+      PGPASSWORD: replicator
+    # Si el data dir está vacío, clona la primaria (-R deja standby.signal + primary_conninfo)
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        set -e
+        if [ ! -s "$$PGDATA/PG_VERSION" ]; then
+          mkdir -p "$$PGDATA" && chown postgres "$$PGDATA" && chmod 700 "$$PGDATA"
+          until gosu postgres pg_basebackup -h db-primary -U replicator -D "$$PGDATA" -Fp -Xs -R -P; do
+            echo "esperando a la primaria..."; sleep 2
+          done
+        fi
+        exec docker-entrypoint.sh postgres -c hot_standby=on
+    ports: ["5433:5432"]
+    volumes:
+      - replica-data:/var/lib/postgresql/data
+    depends_on:
+      db-primary: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U shop -d shop"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+
+  pgbouncer:
+    image: edoburu/pgbouncer
+    volumes:
+      - ./pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ./pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt:ro
+    ports: ["6432:5432"]
+    depends_on:
+      db-primary: { condition: service_healthy }
+      db-replica: { condition: service_healthy }
+
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL_RW: postgresql://shop:shop@pgbouncer:5432/shop
+      DATABASE_URL_RO: postgresql://shop:shop@pgbouncer:5432/shop_ro
+    ports: ["8000:8000"]
+    depends_on: [pgbouncer]
+
+  web:
+    build:
+      context: ./web
+      args:
+        VITE_API_URL: http://localhost:8000
+    ports: ["5173:5173"]
+    depends_on: [api]
+
+volumes:
+  primary-data:
+  replica-data:

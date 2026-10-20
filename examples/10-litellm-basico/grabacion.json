@@ -1,0 +1,129 @@
+{
+  "flash-lite": {
+    "modelo": "gemini/gemini-3.5-flash-lite",
+    "mensajes": [
+      {
+        "role": "system",
+        "content": "Eres el asistente de soporte de una tienda online. Clasifica el ticket en una de: facturacion, envio, producto_defectuoso, otro. Responde en una línea con el formato 'categoria: respuesta de una frase para el cliente'."
+      },
+      {
+        "role": "user",
+        "content": "Me cobraron el envío dos veces y el pedido todavía no llega."
+      }
+    ],
+    "respuesta": {
+      "id": "vMy8av_ADviY6dkP05KKIA",
+      "created": 1790758075,
+      "model": "gemini-3.5-flash-lite",
+      "object": "chat.completion",
+      "system_fingerprint": null,
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "facturacion: Hola, lamentamos el inconveniente con el cobro doble y la demora de tu pedido, ya estamos revisando tu caso para solucionarlo lo antes posible.",
+            "role": "assistant",
+            "tool_calls": null,
+            "function_call": null,
+            "images": [],
+            "thinking_blocks": [],
+            "provider_specific_fields": {
+              "thought_signatures": [
+                "EmAKXgFpFH0TJkJ84GJySioUOm47djCCYyi95FHV+tcpJ8TGIZde9ydbTsBY6ow8TTJ88q+tTAF6s+YVso9G8z5FdnNws7+yazuv6a9ILhr+Tos3SPOvu5LzBVCX6qzbk9w="
+              ]
+            }
+          },
+          "provider_specific_fields": {
+            "native_finish_reason": "STOP"
+          }
+        }
+      ],
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 65,
+        "total_tokens": 102,
+        "completion_tokens_details": {
+          "text_tokens": 37
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": null,
+          "text_tokens": 65,
+          "image_tokens": null,
+          "video_tokens": null
+        },
+        "cache_read_input_tokens": null
+      },
+      "vertex_ai_grounding_metadata": [],
+      "vertex_ai_url_context_metadata": [],
+      "vertex_ai_safety_results": [],
+      "vertex_ai_citation_metadata": [],
+      "service_tier": "default"
+    }
+  },
+  "flash": {
+    "modelo": "gemini/gemini-3.8-flash",
+    "mensajes": [
+      {
+        "role": "system",
+        "content": "Eres el asistente de soporte de una tienda online. Clasifica el ticket en una de: facturacion, envio, producto_defectuoso, otro. Responde en una línea con el formato 'categoria: respuesta de una frase para el cliente'."
+      },
+      {
+        "role": "user",
+        "content": "Me cobraron el envío dos veces y el pedido todavía no llega."
+      }
+    ],
+    "respuesta": {
+      "id": "vMy8atDjPM2LmtkPqK2GqAE",
+      "created": 1790758076,
+      "model": "gemini-3.8-flash",
+      "object": "chat.completion",
+      "system_fingerprint": null,
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "facturacion: Lamentamos el inconveniente, revisaremos el cobro duplicado para reembolsarlo de inmediato y verificaremos el estado de su entrega.",
+            "role": "assistant",
+            "tool_calls": null,
+            "function_call": null,
+            "images": [],
+            "thinking_blocks": [],
+            "provider_specific_fields": {
+              "thought_signatures": [
+                "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"
+              ]
+            }
+          },
+          "provider_specific_fields": {
+            "native_finish_reason": "STOP"
+          }
+        }
+      ],
+      "usage": {
+        "completion_tokens": 516,
+        "prompt_tokens": 65,
+        "total_tokens": 581,
+        "completion_tokens_details": {
+          "reasoning_tokens": 484,
+          "text_tokens": 32
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": null,
+          "text_tokens": 65,
+          "image_tokens": null,
+          "video_tokens": null
+        },
+        "cache_read_input_tokens": null
+      },
+      "vertex_ai_grounding_metadata": [],
+      "vertex_ai_url_context_metadata": [],
+      "vertex_ai_safety_results": [],
+      "vertex_ai_citation_metadata": [],
+      "service_tier": "default"
+    }
+  }
+}
